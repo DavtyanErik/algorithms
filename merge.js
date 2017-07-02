@@ -1,26 +1,33 @@
-const mergeSort = (array) => {
-	if (array.length == 1)
-		return array;
-	const middlePoint = Math.floor(array.length / 2);
-	const firstHalf = array.splice(0, middlePoint);
-	return merge(mergeSort(firstHalf), mergeSort(array));
+const mergeSort = (array, start = 0, end = array.length) => {
+	if (end - start <= 1)
+		return [array[start]];
+	const middle = start + Math.floor((end - start) / 2);
+	return merge(
+		mergeSort(array, start, middle),
+		mergeSort(array, middle, end));
 }
 
 const merge = (arr1, arr2) => {
-	let merged = [];
-	while (arr1.length && arr2.length) {
-		if (arr1[0] < arr2[0])
-			merged.push(arr1.splice(0, 1)[0]);
+	const merged = new Array(arr1.length + arr2.length);
+	let k = 0, i1 = 0, i2 = 0;
+	while (i1 != arr1.length && i2 != arr2.length) {
+		if (arr1[i1] < arr2[i2])
+			merged[k++] = arr1[i1++];
 		else
-			merged.push(arr2.splice(0, 1)[0]);
+			merged[k++] = arr2[i2++];
 	}
-	while (arr1.length)
-		merged.push(arr1.shift());
-	while (arr2.length)
-		merged.push(arr2.shift());
+	while (i1 != arr1.length)
+		merged[k++] = arr1[i1++];
+	while (i2 != arr2.length)
+		merged[k++] = arr2[i2++];
 	return merged;
 }
 
-const array = [1, 8, 19, 7, 0, 90, 2, 1];
+const array = new Array(10000);
+for (let num = 10000, i = 0; i < 10000; i++, num--) {
+	array[i] = num;
+}
 
-console.log(mergeSort(array));
+console.time('timer');
+mergeSort(array);
+console.timeEnd('timer');

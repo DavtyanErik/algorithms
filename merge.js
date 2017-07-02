@@ -2,18 +2,17 @@ const mergeSort = (array) => {
 	if (array.length == 1)
 		return array;
 	const middlePoint = Math.floor(array.length / 2);
-	const firstHalf = array.slice(0, middlePoint);
-	const secondHalf = array.slice(middlePoint, array.length);
-	return merge(mergeSort(firstHalf), mergeSort(secondHalf));
+	const firstHalf = array.splice(0, middlePoint);
+	return merge(mergeSort(firstHalf), mergeSort(array));
 }
 
 const merge = (arr1, arr2) => {
 	let merged = [];
 	while (arr1.length && arr2.length) {
 		if (arr1[0] < arr2[0])
-			merged.push(arr1.shift());
+			merged.push(arr1.splice(0, 1)[0]);
 		else
-			merged.push(arr2.shift());
+			merged.push(arr2.splice(0, 1)[0]);
 	}
 	while (arr1.length)
 		merged.push(arr1.shift());
